@@ -1,0 +1,82 @@
+''' Create a quiz game that presents questions to the user and tracks their score. You can include multiple choice questions, a timer, different categories, 
+and a high-score leaderboard.
+'''
+
+import win32com.client as wincl   # to convert text into speech 
+
+
+speaker = wincl.Dispatch("SAPI.SpVoice")
+print("Welcome to my quiz contest")
+speaker.speak("Welcome to my quiz contest")
+name = input("Enter your name :- ")
+speaker.speak("Enter your name :- ")
+print(f" Hi {name},let's start the game")
+speaker.speak(f"Hi {name}, Let's start the game")
+
+
+Question = ["Which type of Programming does Python support? \na) object-oriented programming \nb) structured programming \nc) functional programming \nd) all of the mentioned", 
+            "Which of the following is the correct extension of the Python file? \na) .python \nb) .pl \nc) .py \nd) .p",
+            "Is Python code compiled or interpreted? \na) Python code is both compiled and interpreted \nb) Python code is neither compiled nor interpreted \nc) Python code is only compiled \nd) Python code is only interpreted",
+            "All keywords in Python are in :-  \na) Capitalized \nb) lower case \nc) UPPER CASE \nd) None of the mentioned",
+            "Which of the following is used to define a block of code in Python language? \na) Indentation \nb) Key \nc) Brackets \nd) All of the mentioned", 
+            "Which keyword is used for function in Python language? \na) Function \nb) def \nc) Fun \nd) Define", 
+            "Which of the following character is used to give single-line comments in Python? \na) // \nb) # \nc) ! \nd) /*",
+            "Which of the following functions is a built-in function in python? \na) factorial() \nb) print() \nc) seed() \nd) sqrt()", 
+            "Which of the following functions can help us to find the version of python that we are currently working on? \na) sys.version(1) \nb) sys.version(0) \nc) sys.version() \nd) sys.version",
+            "Python supports the creation of anonymous functions at runtime, using a construct called :- \na) pi \nb) anonymous \nc) lambda \nd) none of the mentioned"
+            ]
+
+Answer= ["all of the mentioned", ".py", "Python code is both compiled and interpreted", "None of the mentioned", "Indentation", "def", "#", 
+         "print()", "sys.version", "lambda"]
+
+Prize_Money = ["10000", "20000", "30000", "40000", "50000", "60000", "70000", "80000", "90000", "100000"]
+
+
+total_score = 0
+def play_again():
+ speaker = wincl.Dispatch("SAPI.SpVoice")
+ again=input("Do you want to play again yes/no :- ")
+ speaker.Speak("Do you want to play again yes or no :- ")
+ if (again.lower()== "yes" or again.upper() == "YES"):
+  Question_game()
+ elif (again.lower()== "no" or again.upper() == "NO"):
+  print("OK")
+  speaker.Speak("OK")
+  print("Congratulation you have played very well and your total amount who is :-", total_score)
+  speaker.Speak(f"Congratulation you have played very well and your total amount is :- {total_score}")
+ else:
+   print("Invalid input")
+   speaker.speak("Invalid input")
+   play_again()
+
+
+ 
+
+
+def Question_game():
+ global total_score
+ speaker = wincl.Dispatch("SAPI.SpVoice")
+ for i in range(len(Question)):
+   print("Question no:", i+1 , Question[i])
+   speaker.Speak(Question[i])
+   ans = input("Enter your answer here :- ")
+   if ans.lower() == Answer[i].lower():   # so that it will check the correct answer regardless of its font
+    print("correct")
+    speaker.Speak("Correct!")
+    print("Congratulations you have won :- ", Prize_Money[i])
+    speaker.Speak(f"Congratulations! You have won {Prize_Money[i]}.")
+    total_score += int(Prize_Money[i])   # this will calculate total score
+   else:
+    print("wrong")
+    speaker.Speak("Wrong!")
+    print("The total amount who have won is :-", total_score)
+    play_again()
+    break
+   i = i+1   # it should be outside the block so that it will increment the prize index after every iteration
+ if i == len(Question):  # Check if all questions have been answered correctly
+     print("Congratulations, you have completed the game!")
+     print("Your total prize money is:", total_score)
+     speaker.speak(f"Congratulations, you have completed the game!, Your total prize money is:- {total_score}")
+
+ 
+Question_game()
