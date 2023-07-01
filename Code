@@ -8,8 +8,8 @@ import win32com.client as wincl   # to convert text into speech
 speaker = wincl.Dispatch("SAPI.SpVoice")
 print("Welcome to my quiz contest")
 speaker.speak("Welcome to my quiz contest")
-name = input("Enter your name :- ")
 speaker.speak("Enter your name :- ")
+name = input("Enter your name :- ")
 print(f" Hi {name},let's start the game")
 speaker.speak(f"Hi {name}, Let's start the game")
 
