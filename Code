@@ -35,8 +35,8 @@ Prize_Money = ["10000", "20000", "30000", "40000", "50000", "60000", "70000", "8
 total_score = 0
 def play_again():
  speaker = wincl.Dispatch("SAPI.SpVoice")
- again=input("Do you want to play again yes/no :- ")
  speaker.Speak("Do you want to play again yes or no :- ")
+ again=input("Do you want to play again yes/no :- ")
  if (again.lower()== "yes" or again.upper() == "YES"):
   Question_game()
  elif (again.lower()== "no" or again.upper() == "NO"):
@@ -58,7 +58,7 @@ def Question_game():
  speaker = wincl.Dispatch("SAPI.SpVoice")
  for i in range(len(Question)):
    print("Question no:", i+1 , Question[i])
-   speaker.Speak(Question[i])
+  #  speaker.Speak(Question[i])
    ans = input("Enter your answer here :- ")
    if ans.lower() == Answer[i].lower():   # so that it will check the correct answer regardless of its font
     print("correct")
