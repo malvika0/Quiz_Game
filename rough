@@ -1,0 +1,153 @@
+import win32com.client as wincl
+import tkinter as tk
+from tkinter import messagebox
+
+window = tk.Tk()
+window.title("Quiz Game")
+window.geometry("800x800")
+
+class welcome_msg:
+    def __init__(self, entry):
+        self.entry_ = entry
+
+    def welcome(self):
+        name = self.entry_.get()
+        text1 = "Hi " + name + ", welcome to the game!"
+        welcome_label.config(text=text1)
+
+class QuizGame:
+    def __init__(self):
+        global welcome_label
+        self.question_index = 0
+        self.total_score = 0
+        self.speaker = wincl.Dispatch("SAPI.SpVoice")
+
+        self.questions = [
+            "Which type of Programming does Python support?",
+            "Which of the following is the correct extension of the Python file?",
+            "Is Python code compiled or interpreted? \na) Python code is both compiled and interpreted",
+            "All keywords in Python are in :-",
+            "Which of the following is used to define a block of code in Python language?",
+            "Which keyword is used for function in Python language?",
+            "Which of the following character is used to give single-line comments in Python?",
+            "Which of the following functions is a built-in function in python? \na) factorial()",
+            "Which of the following functions can help us to find the version of python that we are currently working on?",
+            "Python supports the creation of anonymous functions at runtime, using a construct called :-"
+        ]
+
+        self.options = [
+            "\na) object-oriented programming \nb) structured programming \nc) functional programming \nd) all of the mentioned",
+            "\na) .python \nb) .pl \nc) .py \nd) .p",
+            "\nb) Python code is neither compiled nor interpreted \nc) Python code is only compiled \nd) Python code is only interpreted",
+            "\na) Capitalized \nb) lower case \nc) UPPER CASE \nd) None of the mentioned",
+            "\na) Indentation \nb) Key \nc) Brackets \nd) All of the mentioned",
+            "\na) // \nb) # \nc) ! \nd) /*",
+            "\nb) print() \nc) seed() \nd) sqrt()",
+            "\na) sys.version(1) \nb) sys.version(0) \nc) sys.version() \nd) sys.version",
+            "\na) pi \nb) anonymous \nc) lambda \nd) none of the mentioned"
+        ]
+
+        self.answers = [
+            "d", "c", "a", "b", "a", "b", "b", "c", "c", "c"
+        ]
+
+        self.prize_money = [
+            10000, 20000, 30000, 40000, 50000
+        ]
+
+        self.label = tk.Label(window, text="Welcome to the Quiz Game!", font=("Arial", 28))
+        self.label.pack(pady=20)
+
+        self.name_label = tk.Label(window, text="Enter your name:", font=("Arial", 18))
+        self.name_label.pack()
+
+        self.entry_ = tk.Entry(window, font=("Arial", 12))
+        self.entry_.pack(pady=10)
+        welcome_label = tk.Label(master=window, text="", height=5, width=30, fg="black", bg="white")
+        welcome_label.pack()
+        button = tk.Button(master=window, text="Submit", command=lambda: welcome_msg(self.entry_).welcome())
+        button.pack()
+
+        self.start_button = tk.Button(window, text="Start Game", font=("Arial", 12), command=self.start_game)
+        self.start_button.pack()
+
+        self.question_label = tk.Label(window, text="", font=("Arial", 12))
+        self.option_a = tk.Button(window, text="", font=("Arial", 12), command=lambda: self.check_answer("a"))
+        self.option_b = tk.Button(window, text="", font=("Arial", 12), command=lambda: self.check_answer("b"))
+        self.option_c = tk.Button(window, text="", font=("Arial", 12), command=lambda: self.check_answer("c"))
+        self.option_d = tk.Button(window, text="", font=("Arial", 12), command=lambda: self.check_answer("d"))
+        self.feedback_label = tk.Label(window, text="", font=("Arial", 12))
+
+        self.play_again_button = tk.Button(window, text="Play Again", font=("Arial", 12), command=self.reset_game)
+
+    def start_game(self):
+        name = self.entry_.get().strip()
+        if name == "":
+            messagebox.showinfo("Error", "Please enter your name.")
+            return
+
+        self.label.pack_forget()
+        self.name_label.pack_forget()
+        self.entry_.pack_forget()
+        self.start_button.pack_forget()
+
+        self.question_label.config(text=self.questions[self.question_index])
+        self.question_label.pack(pady=20)
+
+        self.option_a.config(text=self.options[self.question_index * 4])
+        self.option_a.pack(pady=10)
+
+        self.option_b.config(text=self.options[self.question_index * 4 + 1])
+        self.option_b.pack(pady=10)
+
+        self.option_c.config(text=self.options[self.question_index * 4 + 2])
+        self.option_c.pack(pady=10)
+
+        self.option_d.config(text=self.options[self.question_index * 4 + 3])
+        self.option_d.pack(pady=10)
+
+
+    def check_answer(self, user_answer):
+     correct_answer = self.answers[self.question_index]
+     if user_answer.lower() == correct_answer:
+        self.feedback_label.config(text="Correct!", fg="green")
+        self.total_score += self.prize_money[self.question_index // 4]
+     else:
+        self.feedback_label.config(text="Wrong!", fg="red")
+
+     self.feedback_label.pack(pady=10)
+
+     self.question_index += 1
+     if self.question_index < len(self.questions):
+        self.question_label.config(text=self.questions[self.question_index])
+        self.option_a.config(text=self.options[self.question_index * 4])
+        self.option_b.config(text=self.options[self.question_index * 4 + 1])
+        self.option_c.config(text=self.options[self.question_index * 4 + 2])
+        self.option_d.config(text=self.options[self.question_index * 4 + 3])
+     else:
+        self.display_final_score()
+
+
+    def display_final_score(self):
+        self.question_label.pack_forget()
+        self.option_a.pack_forget()
+        self.option_b.pack_forget()
+        self.option_c.pack_forget()
+        self.option_d.pack_forget()
+        self.feedback_label.pack_forget()
+
+        messagebox.showinfo("Game Over", f"Congratulations, {self.name_entry.get()}! You have completed the game.\n\nYour total score is: {self.total_score}")
+
+        self.play_again_button.pack(pady=20)
+
+    def reset_game(self):
+     self.question_index = 0
+     self.total_score = 0
+
+     self.play_again_button.pack_forget()
+
+     self.start_game()
+
+game = QuizGame()
+
+window.mainloop()
